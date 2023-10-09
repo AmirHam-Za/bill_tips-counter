@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Bill Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="imgs/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-gray-200 py-8">
+
+    <div class="max-w-md mx-auto  p-6 rounded-xl shadow-md bg-gray-100 bg-opacity-50  ">
+        <div class="flex justify-center">
+            <img class="" src="imgs/logo.png" alt="" width="100">
+        </div>
+        <h1 class="bil_counter text-2xl font-semibold mb-4 text-center text-gray-800 uppercase"> Bill Counter </h1>
+
+        <form id="billForm">
+            <div class="mb-4 flex ">
+                <label for="billAmount" class="block font-bold bg-indigo-300 p-2 rounded-l w-3/4 text-gray-800">Bill Amount
+                    (tk):</label>
+                <input type="number" id="billAmount" step="" required
+                    class="w-full px-4 py-2 border rounded-r focus:outline-none focus:ring focus:border-blue-300">
+            </div>
+
+            <div class="mb-4 flex">
+                <label for="tipPercentage" class="block font-bold bg-indigo-300 p-2 rounded-l w-3/4 text-gray-800">Tips Percentage
+                    (%):</label>
+                <input type="number" id="tipPercentage" step="0.01" required
+                    class="w-full px-4 py-2 border rounded-r focus:outline-none focus:ring focus:border-blue-300">
+            </div>
+
+            <div class="mb-4 flex">
+                <label for="numberOfPeople" class="block font-bold bg-indigo-300 p-2 rounded-l w-3/4 text-gray-800">Number of
+                    People:</label>
+                <input type="number" id="numberOfPeople" required
+                    class="w-full px-4 py-2 border rounded-r focus:outline-none focus:ring focus:border-blue-300">
+            </div>
+
+            <div class=" flex justify-center">
+                <button type="button" onclick="calculateBill()"
+                    class="bg-indigo-300 w-2/3 hover:bg-indigo-400 text-gray-800 uppercase font-bold px-4 py-3 transition rounded-full focus:outline-none focus:ring focus:border-blue-300">
+                    Compute
+                </button>
+            </div>
+        </form>
+
+        <div class="flex bg-indigo-100 p-2 rounded mt-4 bg-opacity-40">
+            <div class="mt-4 mr-2 mx-16 text-xl">
+                <p class="text-slate-500 text-right">Total Bill:</p>
+                <p class="text-slate-500 text-right">Tip Amount:</p>
+                <p class="text-slate-500 text-right"> Per Person:</p>
+            </div>
+            <div class=" text-xl">
+                <div id="result" class="mt-4 text-center">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const initialValues = {
+                billAmount: "0",
+                tipPercentage: "0",
+                numberOfPeople: "1",
+            };
+            initializeInputs(initialValues);
+        });
+
+        function initializeInputs(values) {
+            document.getElementById("billAmount").value = values.billAmount;
+            document.getElementById("tipPercentage").value = values.tipPercentage;
+            document.getElementById("numberOfPeople").value = values.numberOfPeople;
+        }
+
+        function calculateBill() {
+            const billAmount = parseFloat(document.getElementById("billAmount").value);
+            const tipPercentage = parseFloat(document.getElementById("tipPercentage").value);
+            const numberOfPeople = parseInt(document.getElementById("numberOfPeople").value);
+
+           
+
+            const tipAmount = (billAmount * tipPercentage) / 100;
+            const totalBill = billAmount + tipAmount;
+            const amountPerPerson = totalBill / numberOfPeople;
+
+            const resultHTML = `
+                <p> ${totalBill.toFixed(2)} tk</p>
+                <p> ${tipAmount.toFixed(2)} tk</p>
+                <p> ${amountPerPerson.toFixed(2)}tk</p>
+            `;
+
+            document.getElementById("result").innerHTML = resultHTML;
+        }
+    </script>
+</body>
+
+</html>
