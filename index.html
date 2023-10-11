@@ -19,40 +19,35 @@
         <h1 class="bil_counter text-2xl font-semibold mb-4 text-center text-gray-800 uppercase"> Bill Counter </h1>
 
         <form id="billForm">
-            <div class="mb-4 flex ">
+            <div class="mb-4 flex">
                 <label for="billAmount" class="block font-bold bg-indigo-300 p-2 rounded-l w-3/4 text-gray-800">Bill Amount
                     (tk):</label>
-                <input type="number" id="billAmount" step="" required
+                <input type="number" id="billAmount" min="0" step="" required
                     class="w-full px-4 py-2 border rounded-r focus:outline-none focus:ring focus:border-blue-300">
             </div>
 
             <div class="mb-4 flex">
                 <label for="tipPercentage" class="block font-bold bg-indigo-300 p-2 rounded-l w-3/4 text-gray-800">Tips Percentage
                     (%):</label>
-                <input type="number" id="tipPercentage" step="5" required
+                <input type="number" id="tipPercentage" step="5" min="0" max="100" required
                     class="w-full px-4 py-2 border rounded-r focus:outline-none focus:ring focus:border-blue-300">
             </div>
 
             <div class="mb-4 flex">
                 <label for="numberOfPeople" class="block font-bold bg-indigo-300 p-2 rounded-l w-3/4 text-gray-800">Number of
                     People:</label>
-                <input type="number" id="numberOfPeople" required
+                <input type="number" id="numberOfPeople" min="1" required
                     class="w-full px-4 py-2 border rounded-r focus:outline-none focus:ring focus:border-blue-300">
             </div>
 
-            <div class=" flex justify-center">
-                <button type="button" onclick="calculateBill()"
-                    class="bg-indigo-300 w-2/3 hover:bg-indigo-400 text-gray-800 uppercase font-bold px-4 py-3 transition rounded-full focus:outline-none focus:ring focus:border-blue-300">
-                    Compute
-                </button>
-            </div>
         </form>
 
         <div class="flex bg-indigo-100 p-2 rounded mt-4 bg-opacity-40">
             <div class="mt-4 mr-2 mx-16 text-xl">
-                <p class="text-slate-500 text-right">Total Bill:</p>
-                <p class="text-slate-500 text-right">Tip Amount:</p>
+                <p class="text-slate-500 text-right">Sub-total Bill:</p>
+                <p class="text-slate-500 text-right">Tips Amount:</p>
                 <p class="text-slate-500 text-right"> Per Person:</p>
+                <p class="text-slate-500 text-right">Total Bill:</p>
             </div>
             <div class=" text-xl">
                 <div id="result" class="mt-4 text-center">
@@ -61,7 +56,6 @@
             </div>
         </div>
     </div>
-
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -79,21 +73,30 @@
             document.getElementById("numberOfPeople").value = values.numberOfPeople;
         }
 
+        const billAmountInput = document.getElementById("billAmount");
+        const tipPercentageInput = document.getElementById("tipPercentage");
+        const numberOfPeopleInput = document.getElementById("numberOfPeople");
+
+        [billAmountInput, tipPercentageInput, numberOfPeopleInput].forEach((input) => {
+            input.addEventListener("input", calculateBill);
+        });
+
         function calculateBill() {
-            const billAmount = parseFloat(document.getElementById("billAmount").value);
-            const tipPercentage = parseFloat(document.getElementById("tipPercentage").value);
-            const numberOfPeople = parseInt(document.getElementById("numberOfPeople").value);
+            const subTotalBillAmount = parseFloat(billAmountInput.value);
+            const billAmount = parseFloat(billAmountInput.value);
+            const tipPercentage = parseFloat(tipPercentageInput.value);
+            const numberOfPeople = parseInt(numberOfPeopleInput.value);
 
-           
-
+            const subTotalBill = (billAmount * 1) ;
             const tipAmount = (billAmount * tipPercentage) / 100;
             const totalBill = billAmount + tipAmount;
             const amountPerPerson = totalBill / numberOfPeople;
 
             const resultHTML = `
-                <p> ${totalBill.toFixed(2)} tk</p>
+                <p> ${subTotalBill.toFixed(2)} tk</p>
                 <p> ${tipAmount.toFixed(2)} tk</p>
                 <p> ${amountPerPerson.toFixed(2)}tk</p>
+                <p> ${totalBill.toFixed(2)} tk</p>
             `;
 
             document.getElementById("result").innerHTML = resultHTML;
